@@ -12,8 +12,10 @@ const StarRating = ($container) => {
     lastLink.after(newLink);
   };
 
-  const setContainer = () => {
-    $container.classList.add("star-rating-container");
+  const createContainer = () => {
+    const starContainer = document.createElement("div");
+    starContainer.className = "star-rating-container";
+    $container.appendChild(starContainer);
   };
 
   const createStars = () => {
@@ -23,12 +25,16 @@ const StarRating = ($container) => {
       star.className = "bx bxs-star";
       star.dataset.rating = i + 1;
 
-      $container.appendChild(star);
+      $container.firstChild.appendChild(star);
     }
   };
 
+  const getStarList = (e) => {
+    return Array.from(e.currentTarget.firstChild.children);
+  };
+
   const resetHover = (e) => {
-    const starList = Array.from(e.currentTarget.children);
+    const starList = getStarList(e);
     starList.forEach((star) =>
       star.classList.remove("hovered")
     );
@@ -39,7 +45,7 @@ const StarRating = ($container) => {
 
     if (!e.target.className.includes("bxs-star")) return;
 
-    const starList = Array.from(e.currentTarget.children);
+    const starList = getStarList(e);
     const rating = e.target.dataset.rating;
     for (let i = 0; i < rating; i++) {
       starList[i].classList.add("hovered");
@@ -47,7 +53,7 @@ const StarRating = ($container) => {
   };
 
   const resetSelect = (e) => {
-    const starList = Array.from(e.currentTarget.children);
+    const starList = getStarList(e);
     starList.forEach((star) =>
       star.classList.remove("selected")
     );
@@ -68,7 +74,7 @@ const StarRating = ($container) => {
 
     resetSelect(e);
 
-    const starList = Array.from(e.currentTarget.children);
+    const starList = getStarList(e);
     const rating = e.target.dataset.rating;
     for (let i = 0; i < rating; i++) {
       starList[i].classList.add("selected");
@@ -79,7 +85,7 @@ const StarRating = ($container) => {
 
   const init = () => {
     applyStyle();
-    setContainer();
+    createContainer();
     createStars();
 
     $container.addEventListener("mouseover", handleHover);
